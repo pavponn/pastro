@@ -6,7 +6,9 @@ import com.github.pavponn.utils.DefaultValues.INIT_TRANSACTION_ID
 import org.junit.Assert
 import org.junit.Test
 
-
+/**
+ * @author pavponn
+ */
 class ConfigurationTest {
 
     companion object {

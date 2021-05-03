@@ -8,7 +8,7 @@ import com.github.pavponn.utils.TransactionId
 /**
  * @author pavponn
  */
-class ConfigurationImpl(private val transactions: Set<Transaction>) : Configuration {
+class ConfigurationImpl(private val transactions: Set<Transaction>) : ConfigurationLattice {
 
     private val processes = mutableSetOf<ProcessId>()
 
@@ -82,4 +82,28 @@ class ConfigurationImpl(private val transactions: Set<Transaction>) : Configurat
             .stream()
             .reduce(0, Integer::sum)
     }
+
+    override fun leq(other: ConfigurationLattice): Boolean {
+        return other.getTransactions().containsAll(getTransactions())
+    }
+
+    override fun less(other: ConfigurationLattice): Boolean {
+        return this leq other && this noteq other
+    }
+
+    override fun eq(other: ConfigurationLattice): Boolean {
+        return getTransactions() == other.getTransactions()
+    }
+
+    override fun noteq(other: ConfigurationLattice): Boolean {
+        return (this eq other).not()
+    }
+
+    override fun merge(other: ConfigurationLattice): ConfigurationLattice {
+        val newTransactionSet = mutableSetOf<Transaction>()
+        newTransactionSet.addAll(getTransactions())
+        newTransactionSet.addAll(other.getTransactions())
+        return ConfigurationImpl(newTransactionSet)
+    }
+
 }
