@@ -12,4 +12,6 @@ interface History {
     fun orderedConfigs(): List<ConfigurationLattice>
 
     fun orderedConfigs(from: ConfigurationLattice): List<ConfigurationLattice>
+
+    fun contains(config: ConfigurationLattice): Boolean
 }

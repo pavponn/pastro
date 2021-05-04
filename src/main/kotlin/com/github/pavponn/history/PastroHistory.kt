@@ -41,6 +41,10 @@ class PastroHistory(configs: Collection<ConfigurationLattice>) : HistoryLattice 
         return configurations.subList(index, configurations.size)
     }
 
+    override fun contains(config: ConfigurationLattice): Boolean {
+        return configurations.contains(config)
+    }
+
     override fun leq(other: HistoryLattice): Boolean {
         return other.orderedConfigs().containsAll(orderedConfigs())
     }

@@ -150,4 +150,16 @@ class HistoryTest {
         val greatestConfig = history.greatestConfig()
         Assert.assertEquals(CONFIGURATION_4, greatestConfig)
     }
+
+    @Test
+    fun `should return true from 'contains()' when configuration that is a part of history`() {
+        val history = PastroHistory(listOf(CONFIGURATION_4, CONFIGURATION_1, CONFIGURATION_3))
+        Assert.assertTrue(history.contains(CONFIGURATION_3))
+    }
+
+    @Test
+    fun `should return false from 'contains()' when configuration that is a part of history`() {
+        val history = PastroHistory(listOf(CONFIGURATION_4, CONFIGURATION_1, CONFIGURATION_3))
+        Assert.assertFalse(history.contains(CONFIGURATION_2))
+    }
 }
