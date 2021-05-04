@@ -7,6 +7,8 @@ import com.github.pavponn.utils.TransactionId
 
 /**
  * @author pavponn
+ *
+ * Implementation of configuration used in Pastro protocol.
  */
 class PastroConfiguration(private val transactions: Set<Transaction>) : ConfigurationLattice {
 
@@ -41,9 +43,9 @@ class PastroConfiguration(private val transactions: Set<Transaction>) : Configur
         return processesStake > neededStake
     }
 
-    override fun getProcessStake(process: ProcessId): Int {
+    override fun getProcessStake(processId: ProcessId): Int {
         val stakes = getStakeDistribution()
-        return stakes.getOrDefault(process, 0)
+        return stakes.getOrDefault(processId, 0)
     }
 
 

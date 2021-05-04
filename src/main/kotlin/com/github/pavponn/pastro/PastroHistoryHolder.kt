@@ -2,7 +2,7 @@ package com.github.pavponn.pastro
 
 import com.github.pavponn.configuration.ConfigurationLattice
 import com.github.pavponn.history.HistoryLattice
-import java.security.cert.Certificate
+import com.github.pavponn.utils.Certificate
 
 /**
  * @author pavponn

@@ -5,6 +5,8 @@ import com.github.pavponn.lattice.compare
 
 /**
  * @author pavponn
+ *
+ * Implementation of history used in Pastro protocol.
  */
 class PastroHistory(configs: Collection<ConfigurationLattice>) : HistoryLattice {
     private val configurations: List<ConfigurationLattice>

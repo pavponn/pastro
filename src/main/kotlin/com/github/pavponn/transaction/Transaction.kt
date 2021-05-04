@@ -7,6 +7,8 @@ import com.github.pavponn.utils.TransferMap
 
 /**
  * @author pavponn
+ *
+ * Data class that represents transaction, defined in Pastro paper.
  */
 data class Transaction(
     val transactionId: TransactionId,

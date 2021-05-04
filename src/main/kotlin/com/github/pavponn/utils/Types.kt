@@ -11,3 +11,5 @@ typealias DependencySet = Set<Pair<ProcessId, TransactionId>>
 typealias Timestamp = Int
 
 typealias Signature = String
+
+typealias Certificate = String

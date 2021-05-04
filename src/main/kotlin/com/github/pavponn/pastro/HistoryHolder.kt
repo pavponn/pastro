@@ -2,7 +2,7 @@ package com.github.pavponn.pastro
 
 import com.github.pavponn.configuration.ConfigurationLattice
 import com.github.pavponn.history.HistoryLattice
-import java.security.cert.Certificate
+import com.github.pavponn.utils.Certificate
 
 /**
  * @author pavponn
@@ -30,7 +30,7 @@ interface HistoryHolder {
 
     /**
      * Returns current installed configuration. The configurations returned
-     * by this function should be comparable  (w.r.t. ⊆) and only can grow (also w.r.t. ⊆)
+     * by this function should be comparable  (w.r.t. ⊑) and only can grow (also w.r.t. ⊑)
      * with time.
      */
     fun getConfigInstalled(): ConfigurationLattice
@@ -45,7 +45,7 @@ interface HistoryHolder {
     /**
      * Returns configuration from which next state transfer protocol should be performed.
      * The configurations returned by this function should be comparable (w.r.t. ⊆)
-     * and only can grow (also w.r.t. ⊆) with time.
+     * and only can grow (also w.r.t. ⊑) with time.
      */
     fun getConfigStateTransfer(): ConfigurationLattice
 
