@@ -8,7 +8,7 @@ import com.github.pavponn.utils.TransactionId
 /**
  * @author pavponn
  */
-class ConfigurationImpl(private val transactions: Set<Transaction>) : ConfigurationLattice {
+class PastroConfiguration(private val transactions: Set<Transaction>) : ConfigurationLattice {
 
     private val processes = mutableSetOf<ProcessId>()
 
@@ -103,7 +103,7 @@ class ConfigurationImpl(private val transactions: Set<Transaction>) : Configurat
         val newTransactionSet = mutableSetOf<Transaction>()
         newTransactionSet.addAll(getTransactions())
         newTransactionSet.addAll(other.getTransactions())
-        return ConfigurationImpl(newTransactionSet)
+        return PastroConfiguration(newTransactionSet)
     }
 
 }

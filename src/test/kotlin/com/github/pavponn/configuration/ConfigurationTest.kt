@@ -12,8 +12,8 @@ import org.junit.Test
 class ConfigurationTest {
 
     companion object {
-        const val TOTAL_STAKE = 45
-        val TR_INIT = Transaction(
+        private const val TOTAL_STAKE = 45
+        private val TR_INIT = Transaction(
             INIT_TRANSACTION_ID,
             INIT_SENDER,
             mapOf(
@@ -24,7 +24,7 @@ class ConfigurationTest {
             emptySet()
         )
 
-        val TR_1_BY_1 = Transaction(
+        private val TR_1_BY_1 = Transaction(
             1,
             1,
             mapOf(
@@ -35,7 +35,7 @@ class ConfigurationTest {
             setOf(Pair(INIT_SENDER, INIT_TRANSACTION_ID))
         )
 
-        val TR_1_BY_2 = Transaction(
+        private val TR_1_BY_2 = Transaction(
             1,
             2,
             mapOf(
@@ -46,7 +46,7 @@ class ConfigurationTest {
             setOf(Pair(INIT_SENDER, INIT_TRANSACTION_ID))
         )
 
-        val TR_1_BY_3 = Transaction(
+        private val TR_1_BY_3 = Transaction(
             1,
             3,
             mapOf(
@@ -60,7 +60,7 @@ class ConfigurationTest {
             )
         )
 
-        val TR_2_BY_2 = Transaction(
+        private val TR_2_BY_2 = Transaction(
             2,
             2,
             mapOf(
@@ -74,28 +74,28 @@ class ConfigurationTest {
 
     @Test
     fun `should calculate total stake correctly with one transaction`() {
-        val configuration = ConfigurationImpl(setOf(TR_INIT))
+        val configuration = PastroConfiguration(setOf(TR_INIT))
         val result = configuration.getTotalStake()
         Assert.assertEquals(TOTAL_STAKE, result)
     }
 
     @Test
     fun `should calculate total stake correctly with two transactions`() {
-        val configuration = ConfigurationImpl(setOf(TR_INIT, TR_1_BY_1))
+        val configuration = PastroConfiguration(setOf(TR_INIT, TR_1_BY_1))
         val result = configuration.getTotalStake()
         Assert.assertEquals(TOTAL_STAKE, result)
     }
 
     @Test
     fun `should calculate total stake correctly with several transactions`() {
-        val configuration = ConfigurationImpl(setOf(TR_INIT, TR_1_BY_1, TR_1_BY_2, TR_1_BY_3, TR_2_BY_2))
+        val configuration = PastroConfiguration(setOf(TR_INIT, TR_1_BY_1, TR_1_BY_2, TR_1_BY_3, TR_2_BY_2))
         val result = configuration.getTotalStake()
         Assert.assertEquals(TOTAL_STAKE, result)
     }
 
     @Test
     fun `should calculate stake for every participant correctly with one transaction`() {
-        val configuration = ConfigurationImpl(setOf(TR_INIT))
+        val configuration = PastroConfiguration(setOf(TR_INIT))
         val stakeDistribution = configuration.getStakeDistribution()
         Assert.assertEquals(10, stakeDistribution.getOrDefault(1, 0))
         Assert.assertEquals(22, stakeDistribution.getOrDefault(2, 0))
@@ -108,7 +108,7 @@ class ConfigurationTest {
 
     @Test
     fun `should calculate stake for every participant correctly with two transactions`() {
-        val configuration = ConfigurationImpl(setOf(TR_INIT, TR_1_BY_2))
+        val configuration = PastroConfiguration(setOf(TR_INIT, TR_1_BY_2))
         val stakeDistribution = configuration.getStakeDistribution()
         Assert.assertEquals(13, stakeDistribution.getOrDefault(1, 0))
         Assert.assertEquals(7, stakeDistribution.getOrDefault(2, 0))
@@ -121,7 +121,7 @@ class ConfigurationTest {
 
     @Test
     fun `should calculate stake for every participant with several transactions`() {
-        val configuration = ConfigurationImpl(setOf(TR_INIT, TR_1_BY_2, TR_1_BY_1, TR_1_BY_3, TR_2_BY_2))
+        val configuration = PastroConfiguration(setOf(TR_INIT, TR_1_BY_2, TR_1_BY_1, TR_1_BY_3, TR_2_BY_2))
         val stakeDistribution = configuration.getStakeDistribution()
         Assert.assertEquals(24, stakeDistribution.getOrDefault(1, 0))
         Assert.assertEquals(18, stakeDistribution.getOrDefault(2, 0))
@@ -134,7 +134,7 @@ class ConfigurationTest {
 
     @Test
     fun `should determine whether set of process is a quorum in one transaction configuration`() {
-        val configuration = ConfigurationImpl(setOf(TR_INIT))
+        val configuration = PastroConfiguration(setOf(TR_INIT))
 
         Assert.assertEquals(false, configuration.hasQuorum(setOf(1)))
         Assert.assertEquals(false, configuration.hasQuorum(setOf(2)))
@@ -150,7 +150,7 @@ class ConfigurationTest {
 
     @Test
     fun `should determine whether set of process is a quorum in two transactions configuration`() {
-        val configuration = ConfigurationImpl(setOf(TR_INIT, TR_1_BY_2))
+        val configuration = PastroConfiguration(setOf(TR_INIT, TR_1_BY_2))
 
         Assert.assertEquals(false, configuration.hasQuorum(setOf(1)))
         Assert.assertEquals(false, configuration.hasQuorum(setOf(2)))
@@ -165,7 +165,7 @@ class ConfigurationTest {
 
     @Test
     fun `should determine whether set of process is a quorum in several transactions configuration`() {
-        val configuration = ConfigurationImpl(setOf(TR_INIT, TR_1_BY_2, TR_1_BY_1, TR_2_BY_2, TR_1_BY_3))
+        val configuration = PastroConfiguration(setOf(TR_INIT, TR_1_BY_2, TR_1_BY_1, TR_2_BY_2, TR_1_BY_3))
 
         Assert.assertEquals(false, configuration.hasQuorum(setOf(1)))
         Assert.assertEquals(false, configuration.hasQuorum(setOf(2)))
