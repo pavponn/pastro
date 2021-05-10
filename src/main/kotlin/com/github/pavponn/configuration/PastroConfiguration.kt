@@ -85,6 +85,10 @@ class PastroConfiguration(private val transactions: Set<Transaction>) : Configur
             .reduce(0, Integer::sum)
     }
 
+    override fun getSize(): Int {
+        return transactions.size
+    }
+
     override fun leq(other: ConfigurationLattice): Boolean {
         return other.getTransactions().containsAll(getTransactions())
     }

@@ -36,4 +36,10 @@ interface Configuration {
      * Returns total stake in the system according to this configuration.
      */
     fun getTotalStake(): Int
+
+    /**
+     * Returns size of configuration (number of transactions).
+     */
+    fun getSize(): Int
+
 }

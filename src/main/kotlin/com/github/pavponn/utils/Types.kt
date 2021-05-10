@@ -1,5 +1,7 @@
 package com.github.pavponn.utils
 
+import com.github.pavponn.transaction.Transaction
+
 /**
  * @author pavponn
  */
@@ -13,3 +15,7 @@ typealias Timestamp = Int
 typealias Signature = String
 
 typealias Certificate = String
+
+typealias SequenceNumber = Int
+
+typealias SignedTransaction = Pair<Transaction, Certificate>
