@@ -16,10 +16,14 @@ class ForwardSecureDigitalSignaturesBasic: ForwardSecureDigitalSignatures {
     }
 
     override fun signFS(message: Message, timestamp: Timestamp): Signature {
-        return ""
+        return DEFAULT_SIGNATURE
     }
 
     override fun verifyFS(message: Message, process: ProcessId, signature: Signature, timestamp: Timestamp): Boolean {
         return true
+    }
+
+    companion object {
+        const val DEFAULT_SIGNATURE = ""
     }
 }

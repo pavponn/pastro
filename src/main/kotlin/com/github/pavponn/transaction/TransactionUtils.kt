@@ -42,7 +42,7 @@ fun allDependencies(tx: Transaction, otherTransactions: Collection<Transaction>)
  * Checks whether transaction [tx] reference itself.
  */
 fun referenceItself(tx: Transaction): Boolean {
-    return tx.dependencies.any { it.first == tx.spenderId && it.second == tx.spenderId }
+    return tx.dependencies.any { it.first == tx.spenderId && it.second == tx.transactionId }
 }
 
 fun transactionValue(tx: Transaction): Int {

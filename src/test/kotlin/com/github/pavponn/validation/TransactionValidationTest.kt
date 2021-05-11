@@ -2,9 +2,11 @@ package com.github.pavponn.validation
 
 import com.github.pavponn.configuration.PastroConfiguration
 import com.github.pavponn.environment.Environment
+import com.github.pavponn.fsds.ForwardSecureDigitalSignaturesBasic.Companion.DEFAULT_SIGNATURE
 import com.github.pavponn.history.PastroHistory
 import com.github.pavponn.message.Message
 import com.github.pavponn.message.ValidateRequest
+import com.github.pavponn.message.ValidateResponse
 import com.github.pavponn.pastro.PastroHistoryHolder
 import com.github.pavponn.transaction.Transaction
 import com.github.pavponn.transaction.signTransaction
@@ -101,8 +103,6 @@ class TransactionValidationTest {
                 send(message, it)
             }
         }
-
-
     }
 
     private lateinit var testEnvironment: TestEnvironment
@@ -149,4 +149,138 @@ class TransactionValidationTest {
             }
         )
     }
+
+    @Test
+    fun `should validate correct transaction`() {
+        val sender = 2
+        val transaction = Transaction(
+            3,
+            sender,
+            mapOf(
+                2 to 5,
+                1 to 5
+            ),
+            setOf(
+                2 to 2,
+                2 to 1
+            ),
+        )
+        val certificate = signTransaction(transaction)
+        val signedTransaction = Pair(transaction, certificate)
+        val request = ValidateRequest(signedTransaction, CONFIGURATION.getSize())
+        transactionValidation.onMessage(request, sender)
+        Assert.assertTrue(
+            testEnvironment.messagesSentTo[sender]!!.contains(
+                ValidateResponse(
+                    signedTransaction,
+                    DEFAULT_SIGNATURE
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `should not validate transaction`() {
+        val sender = 2
+        val transaction = Transaction(
+            3,
+            sender,
+            mapOf(
+                1 to 22
+            ),
+            setOf(
+                DefaultValues.INIT_SENDER to DefaultValues.INIT_TRANSACTION_ID
+            )
+        )
+        val certificate = signTransaction(transaction)
+        val signedTransaction = Pair(transaction, certificate)
+        val request = ValidateRequest(signedTransaction, CONFIGURATION.getSize())
+        transactionValidation.onMessage(request, sender)
+        Assert.assertTrue(
+            testEnvironment.messagesSentTo[sender] == null ||
+                    testEnvironment.messagesSentTo[sender]!!.isEmpty()
+        )
+    }
+
+
+    @Test
+    fun `should validate first transaction and should not validate second`() {
+        val sender = 2
+        val transactionOne = Transaction(
+            3,
+            sender,
+            mapOf(
+                2 to 5,
+                1 to 5
+            ),
+            setOf(
+                2 to 2,
+                2 to 1
+            ),
+        )
+        val transactionTwo = Transaction(
+            4,
+            sender,
+            mapOf(
+                1 to 3,
+            ),
+            setOf(
+                2 to 2
+            )
+        )
+        val certificateOne = signTransaction(transactionOne)
+        val signedTransactionOne = Pair(transactionOne, certificateOne)
+        val requestOne = ValidateRequest(signedTransactionOne, CONFIGURATION.getSize())
+        transactionValidation.onMessage(requestOne, sender)
+        val certificateTwo = signTransaction(transactionTwo)
+        val signedTransactionTwo = Pair(transactionTwo, certificateTwo)
+        val requestTwo = ValidateRequest(signedTransactionTwo, CONFIGURATION.getSize())
+        transactionValidation.onMessage(requestTwo, sender)
+        transactionValidation
+        Assert.assertTrue(
+            testEnvironment.messagesSentTo[sender]!!.contains(
+                ValidateResponse(
+                    signedTransactionOne,
+                    DEFAULT_SIGNATURE
+                )
+            )
+        )
+        Assert.assertFalse(
+            testEnvironment.messagesSentTo[sender]!!.contains(
+                ValidateResponse(
+                    signedTransactionTwo,
+                    DEFAULT_SIGNATURE
+                )
+            )
+        )
+
+        Assert.assertEquals(1, testEnvironment.messagesSentTo[sender]!!.size)
+    }
+
+    @Test
+    fun `should validate when quorum signed`() {
+        var validationResponse = 1
+        var validatedAfter = -1
+        val transaction = Transaction(
+            2,
+            1,
+            mapOf(2 to 5),
+            setOf(1 to 1),
+        )
+        val certificate = signTransaction(transaction)
+        val signedTransaction = Pair(transaction, certificate)
+        val onResultListener: (Transaction, ValidationCertificate) -> Unit =
+            { _: Transaction, _: ValidationCertificate ->
+                validatedAfter = validationResponse
+            }
+        transactionValidation.onResult(onResultListener)
+        transactionValidation.validate(transaction, certificate)
+        transactionValidation.onMessage(ValidateResponse(signedTransaction, DEFAULT_SIGNATURE), 2)
+        validationResponse += 1
+        transactionValidation.onMessage(ValidateResponse(signedTransaction, DEFAULT_SIGNATURE), 1)
+        validationResponse += 1
+        transactionValidation.onMessage(ValidateResponse(signedTransaction, DEFAULT_SIGNATURE), 3)
+        Assert.assertEquals(2, validatedAfter)
+    }
+
 }
