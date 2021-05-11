@@ -9,6 +9,5 @@ import com.github.pavponn.utils.SequenceNumber
  */
 data class ValidateRequest(
     val signedTransaction: Pair<Transaction, Certificate>,
-    val sn: SequenceNumber,
     val configSize: Int
 ) : TVMessage

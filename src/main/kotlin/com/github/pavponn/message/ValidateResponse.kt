@@ -10,9 +10,8 @@ import com.github.pavponn.utils.SignedTransaction
 data class ValidateResponse(
     val signedTransaction: SignedTransaction,
     val signature: Signature,
-    val sn: SequenceNumber
-): TVMessage
+) : TVMessage
 
 data class ValidateResponseSign(
     val transaction: SignedTransaction
-): Message
+) : Message

@@ -14,7 +14,8 @@ import com.github.pavponn.fsds.ForwardSecureDigitalSignaturesBasic
  */
 class PastroTransactionValidation(
     private val historyHolder: HistoryHolder,
-    private val environment: Environment
+    private val environment: Environment,
+    private val initialSeenTransactions: Set<Transaction>,
 ) : TransactionValidation {
 
     enum class Status {
@@ -22,13 +23,12 @@ class PastroTransactionValidation(
         Inactive
     }
 
-    private var seqNum = 0
     private var status: Status = Status.Inactive
 
     private var acks: MutableMap<Transaction, MutableSet<ProcessId>> = mutableMapOf()
-    private val seenTransactions: MutableSet<Pair<Transaction, Certificate>> = mutableSetOf()
+    private val seenTransactions: MutableSet<Pair<Transaction, Certificate>> =
+        initialSeenTransactions.map { Pair(it, "") }.toMutableSet()
 
-    private var result: Pair<Transaction, ValidationCertificate>? = null
     private val executeOnResult: MutableList<(Transaction, ValidationCertificate) -> Unit> = mutableListOf()
 
     private val fsds = ForwardSecureDigitalSignaturesBasic()
@@ -37,10 +37,9 @@ class PastroTransactionValidation(
         val signedTransaction = Pair(transaction, certificate)
         acks[transaction] = mutableSetOf()
         seenTransactions.add(signedTransaction)
-        seqNum += 1
         status = Status.Requesting
         val config = historyHolder.getHistory().greatestConfig()
-        environment.broadcast(ValidateRequest(signedTransaction, seqNum, config.getSize()))
+        environment.broadcast(ValidateRequest(signedTransaction, config.getSize()))
     }
 
     override fun onMessage(message: TVMessage, from: ProcessId) {
@@ -60,7 +59,6 @@ class PastroTransactionValidation(
 
     override fun verifySenders(signedTransactions: Collection<SignedTransaction>) =
         signedTransactions.all { verifySender(it.first, it.second) }
-
 
     override fun onResult(listener: (Transaction, ValidationCertificate) -> Unit) {
         executeOnResult.add(listener)
@@ -88,7 +86,7 @@ class PastroTransactionValidation(
                     ValidateResponseSign(signedTransaction),
                     historyHolder.getHistory().greatestConfig().getSize()
                 )
-                environment.send(ValidateResponse(signedTransaction, sig, message.sn), from)
+                environment.send(ValidateResponse(signedTransaction, sig), from)
             }
         }
 
