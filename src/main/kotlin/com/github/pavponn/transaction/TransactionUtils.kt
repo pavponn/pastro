@@ -45,8 +45,33 @@ fun referenceItself(tx: Transaction): Boolean {
     return tx.dependencies.any { it.first == tx.spenderId && it.second == tx.spenderId }
 }
 
+fun transactionValue(tx: Transaction): Int {
+    var result = 0
+    tx.transfer.entries.forEach {
+        result += it.value
+    }
+    return result
+}
+
+/**
+ * Check whether transaction is valid: i.e., sum of funds spend is equal to sum of funds used as dependencies.
+ */
 fun isValid(tx: Transaction, otherTransactions: Collection<Transaction>): Boolean {
-    TODO("To be implemented")
+    var inputsSum = 0
+    tx.dependencies.forEach {
+        otherTransactions.forEach { other ->
+            if (it.first == other.spenderId && it.second == other.transactionId) {
+                inputsSum += other.transfer.getOrDefault(tx.spenderId, 0)
+            }
+        }
+    }
+    return inputsSum == transactionValue(tx)
+}
+
+fun isValidAndWellFormed(tx: Transaction, otherTransactions: Collection<Transaction>): Boolean {
+    return allDependencies(tx, otherTransactions) &&
+            !referenceItself(tx) && isValid(tx, otherTransactions)
+
 }
 
 /**

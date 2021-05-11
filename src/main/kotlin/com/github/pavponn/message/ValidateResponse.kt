@@ -12,3 +12,7 @@ data class ValidateResponse(
     val signature: Signature,
     val sn: SequenceNumber
 ): TVMessage
+
+data class ValidateResponseSign(
+    val transaction: SignedTransaction
+): Message

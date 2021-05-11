@@ -16,11 +16,9 @@ interface TransactionValidation {
 
     fun onMessage(message: TVMessage, from: ProcessId)
 
-    fun getResult(): Pair<Transaction, ValidationCertificate>?
-
-    fun onResult(listener: (Pair<Transaction, ValidationCertificate>) -> Unit)
+    fun onResult(listener: (Transaction, ValidationCertificate) -> Unit)
 
     fun verifySenders(signedTransactions: Collection<SignedTransaction>): Boolean
 }
 
-typealias ValidationCertificate = Set<Pair<Signature, ProcessId>>
+typealias ValidationCertificate = String

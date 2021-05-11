@@ -109,4 +109,33 @@ class TransactionsTest {
         Assert.assertFalse(conflict(transactionOne, transactionTwo))
     }
 
+    @Test
+    fun `should confirm validness of transaction`() {
+        val transaction = Transaction(
+            1,
+            1,
+            mapOf(3 to 4, 4 to 5),
+            setOf(2 to 1, 5 to 1)
+        )
+
+        val transactionByTwo = Transaction(
+            1,
+            2,
+            mapOf(1 to 3, 2 to 5),
+            setOf()
+        )
+
+        val transactionByFive = Transaction(
+            1,
+            5,
+            mapOf(1 to 6, 7 to 4),
+            setOf()
+        )
+
+        val seenTransactions = setOf(transactionByTwo, transactionByFive)
+
+        Assert.assertTrue(isValid(transaction, seenTransactions))
+        Assert.assertTrue(isValidAndWellFormed(transaction, seenTransactions))
+    }
+
 }

@@ -1,17 +1,13 @@
 package com.github.pavponn.validation
 
 import com.github.pavponn.environment.Environment
-import com.github.pavponn.message.TVMessage
-import com.github.pavponn.message.UnknownMessageException
-import com.github.pavponn.message.ValidateRequest
-import com.github.pavponn.message.ValidateResponse
+import com.github.pavponn.message.*
 import com.github.pavponn.pastro.HistoryHolder
-import com.github.pavponn.transaction.Transaction
-import com.github.pavponn.transaction.verifySender
+import com.github.pavponn.transaction.*
 import com.github.pavponn.utils.Certificate
 import com.github.pavponn.utils.ProcessId
 import com.github.pavponn.utils.SignedTransaction
-
+import com.github.pavponn.fsds.ForwardSecureDigitalSignaturesBasic
 
 /**
  * @author pavponn
@@ -29,17 +25,17 @@ class PastroTransactionValidation(
     private var seqNum = 0
     private var status: Status = Status.Inactive
 
-    private val acks: Set<Pair<ProcessId, Certificate>> = mutableSetOf()
+    private var acks: MutableMap<Transaction, MutableSet<ProcessId>> = mutableMapOf()
     private val seenTransactions: MutableSet<Pair<Transaction, Certificate>> = mutableSetOf()
 
-    private var curTransaction: SignedTransaction? = null
-
     private var result: Pair<Transaction, ValidationCertificate>? = null
-    private val executeOnResult: MutableList<(Pair<Transaction, ValidationCertificate>) -> Unit> = mutableListOf()
+    private val executeOnResult: MutableList<(Transaction, ValidationCertificate) -> Unit> = mutableListOf()
+
+    private val fsds = ForwardSecureDigitalSignaturesBasic()
 
     override fun validate(transaction: Transaction, certificate: Certificate) {
         val signedTransaction = Pair(transaction, certificate)
-        curTransaction = signedTransaction
+        acks[transaction] = mutableSetOf()
         seenTransactions.add(signedTransaction)
         seqNum += 1
         status = Status.Requesting
@@ -65,11 +61,8 @@ class PastroTransactionValidation(
     override fun verifySenders(signedTransactions: Collection<SignedTransaction>) =
         signedTransactions.all { verifySender(it.first, it.second) }
 
-    override fun getResult(): Pair<Transaction, ValidationCertificate>? {
-        return result
-    }
 
-    override fun onResult(listener: (Pair<Transaction, ValidationCertificate>) -> Unit) {
+    override fun onResult(listener: (Transaction, ValidationCertificate) -> Unit) {
         executeOnResult.add(listener)
     }
 
@@ -78,18 +71,56 @@ class PastroTransactionValidation(
             message.configSize != historyHolder.getConfigInstalled().getSize() &&
             historyHolder.getHistory().greatestConfig().getSize() >= message.configSize
         ) {
-            // TODO: wait
+            // intentionally left blank
         }
+        val signedTransaction = message.signedTransaction
+        val transaction = message.signedTransaction.first
+        val seenTransactionsNotSigned = signedTransactionsToTransactions(seenTransactions)
+        if (verifySenders(setOf(signedTransaction)) &&
+            isValidAndWellFormed(transaction, seenTransactionsNotSigned)
+        ) {
+            // add transaction to the set of seen transactions
+            seenTransactions.add(signedTransaction)
 
+            // if transaction doesn't conflict, then sign it and send the response
+            if (noConflictsWith(transaction, seenTransactionsNotSigned)) {
+                val sig = fsds.signFS(
+                    ValidateResponseSign(signedTransaction),
+                    historyHolder.getHistory().greatestConfig().getSize()
+                )
+                environment.send(ValidateResponse(signedTransaction, sig, message.sn), from)
+            }
+        }
 
     }
 
 
     private fun handleValidateResponse(message: ValidateResponse, from: ProcessId) {
-        TODO("Not yet implemented")
+        val collectedSignatures = acks[message.signedTransaction.first] ?: return
+        if (historyHolder.getHistory().greatestConfig().hasQuorum(collectedSignatures)) {
+            return
+        }
+        val config = historyHolder.getHistory().greatestConfig()
+        val isValid = fsds.verifyFS(
+            ValidateResponseSign(message.signedTransaction),
+            from,
+            message.signature,
+            config.getSize()
+        )
+        if (!isValid) {
+            return
+        }
+        acks[message.signedTransaction.first]!!.add(from)
+        checkReturn(message.signedTransaction)
     }
 
-
-
+    private fun checkReturn(signedTransaction: SignedTransaction) {
+        val signatures = acks[signedTransaction.first] ?: emptySet()
+        if (historyHolder.getHistory().greatestConfig().hasQuorum(signatures)) {
+            executeOnResult.forEach {
+                it(signedTransaction.first, "")
+            }
+        }
+    }
 
 }
