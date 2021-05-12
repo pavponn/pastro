@@ -1,13 +1,17 @@
-package com.github.pavponn.validation
+package com.github.pavponn.holder.validation
 
 import com.github.pavponn.environment.Environment
 import com.github.pavponn.message.*
-import com.github.pavponn.pastro.HistoryHolder
+import com.github.pavponn.holder.HistoryHolder
 import com.github.pavponn.transaction.*
 import com.github.pavponn.utils.Certificate
 import com.github.pavponn.utils.ProcessId
 import com.github.pavponn.utils.SignedTransaction
 import com.github.pavponn.fsds.ForwardSecureDigitalSignaturesBasic
+import com.github.pavponn.message.validation.TVMessage
+import com.github.pavponn.message.validation.ValidateRequest
+import com.github.pavponn.message.validation.ValidateResponse
+import com.github.pavponn.message.validation.ValidateResponseSign
 
 /**
  * @author pavponn

@@ -1,4 +1,4 @@
-package com.github.pavponn.pastro
+package com.github.pavponn.holder
 
 import com.github.pavponn.configuration.ConfigurationLattice
 import com.github.pavponn.history.HistoryLattice

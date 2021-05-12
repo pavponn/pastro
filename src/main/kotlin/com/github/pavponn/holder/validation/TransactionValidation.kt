@@ -1,10 +1,9 @@
-package com.github.pavponn.validation
+package com.github.pavponn.holder.validation
 
-import com.github.pavponn.message.TVMessage
+import com.github.pavponn.message.validation.TVMessage
 import com.github.pavponn.transaction.Transaction
 import com.github.pavponn.utils.Certificate
 import com.github.pavponn.utils.ProcessId
-import com.github.pavponn.utils.Signature
 import com.github.pavponn.utils.SignedTransaction
 
 /**

@@ -1,6 +1,6 @@
-package com.github.pavponn.message
+package com.github.pavponn.message.validation
 
-import com.github.pavponn.utils.SequenceNumber
+import com.github.pavponn.message.Message
 import com.github.pavponn.utils.Signature
 import com.github.pavponn.utils.SignedTransaction
 
