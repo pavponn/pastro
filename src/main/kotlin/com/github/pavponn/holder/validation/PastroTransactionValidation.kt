@@ -120,7 +120,8 @@ class PastroTransactionValidation(
         val signatures = acks[signedTransaction.first] ?: emptySet()
         if (historyHolder.getHistory().greatestConfig().hasQuorum(signatures)) {
             executeOnResult.forEach {
-                it(signedTransaction.first, "")
+                val isQuorum = historyHolder.getHistory().greatestConfig().hasQuorum(signatures.toSet())
+                it(signedTransaction.first, "signatures of: $signatures, isQuorum: $isQuorum;")
             }
         }
     }

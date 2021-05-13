@@ -17,7 +17,7 @@ import com.github.pavponn.message.settings.HolderMessage
 
 /**
  * @author pavponn
- * Class that implements main pastro pipeline.
+ * Class that implements main Pastro pipeline.
  */
 class PastroProcess : AbstractActor() {
 
@@ -25,7 +25,6 @@ class PastroProcess : AbstractActor() {
     private lateinit var transactionValidation: TransactionValidation
 
     companion object {
-
         @JvmStatic
         fun createActor(): Props {
             return Props.create(PastroProcess::class.java, ::PastroProcess)
@@ -90,6 +89,9 @@ class PastroProcess : AbstractActor() {
                 environment,
                 message.historyHolder.getHistory().greatestConfig().getTransactions()
             )
+        transactionValidation.onResult { tx, certificate ->
+            println("${self.path().name()} validated transaction $tx with certificate $certificate")
+        }
     }
 
     private fun getSenderId(): Int {
