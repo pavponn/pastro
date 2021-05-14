@@ -16,15 +16,14 @@ import com.github.pavponn.utils.ProcessId
  * @author pavponn
  */
 class PastroAdjustableByzantineLatticeAgreement<E : Lattice<E>>(
-    initInput: E,
-    initCertificate: Certificate,
+    initInput: VerifiableObject<E>,
     private val environment: Environment,
     private val historyHolder: HistoryHolder,
     private val verifyingFunction: (VerifiableObject<E>) -> Boolean,
 
     ) : AdjustableByzantineLatticeAgreement<E> {
 
-    private val values: MutableSet<VerifiableObject<E>> = mutableSetOf(Pair(initInput, initCertificate))
+    private val values: MutableSet<VerifiableObject<E>> = mutableSetOf(initInput)
     private var acks: MutableSet<ProcessId> = mutableSetOf()
     private var seqNum = 0
     private var isProposing = false
@@ -42,7 +41,8 @@ class PastroAdjustableByzantineLatticeAgreement<E : Lattice<E>>(
     private fun refine(vs: Set<VerifiableObject<E>>) {
         acks = mutableSetOf()
         values.addAll(vs)
-        sentValues = values
+        sentValues = mutableSetOf()
+        sentValues.addAll(values)
         seqNum += 1
         isProposing = true
         val config = historyHolder.getHistory().greatestConfig()
@@ -114,7 +114,10 @@ class PastroAdjustableByzantineLatticeAgreement<E : Lattice<E>>(
             executeOnResult.forEach {
                 it(result, "signatures from: $acks, isQuorum: ${config.hasQuorum(acks)}")
             }
+            acks = mutableSetOf()
         }
+
+
     }
 
     override fun onResult(listener: (E, Certificate) -> Unit) {
