@@ -10,7 +10,7 @@ import com.github.pavponn.utils.Timestamp
  *
  * This class is a stub implementation for Forward Secure Digital Signatures.
  */
-class ForwardSecureDigitalSignaturesBasic: ForwardSecureDigitalSignatures {
+class ForwardSecureDigitalSignaturesBasic : ForwardSecureDigitalSignatures {
     override fun updateFSKey(timestamp: Timestamp) {
         // intentionally left empty
     }

@@ -4,13 +4,13 @@ import com.github.pavponn.configuration.PastroConfiguration
 import com.github.pavponn.environment.Environment
 import com.github.pavponn.fsds.ForwardSecureDigitalSignaturesBasic.Companion.DEFAULT_SIGNATURE
 import com.github.pavponn.history.PastroHistory
+import com.github.pavponn.holder.PastroHistoryHolder
 import com.github.pavponn.holder.validation.PastroTransactionValidation
 import com.github.pavponn.holder.validation.TransactionValidation
 import com.github.pavponn.holder.validation.ValidationCertificate
 import com.github.pavponn.message.Message
 import com.github.pavponn.message.validation.ValidateRequest
 import com.github.pavponn.message.validation.ValidateResponse
-import com.github.pavponn.holder.PastroHistoryHolder
 import com.github.pavponn.transaction.Transaction
 import com.github.pavponn.transaction.signTransaction
 import com.github.pavponn.utils.DefaultValues

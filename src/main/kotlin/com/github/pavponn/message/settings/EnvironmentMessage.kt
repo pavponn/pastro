@@ -5,7 +5,7 @@ import akka.actor.ActorRef
 /**
  * @author pavponn
  */
-data class EnvironmentMessage(val processId: Int, val actorRefs: Array<ActorRef>): SettingsMessage {
+data class EnvironmentMessage(val processId: Int, val actorRefs: Array<ActorRef>) : SettingsMessage {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

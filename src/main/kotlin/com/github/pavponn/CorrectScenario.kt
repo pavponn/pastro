@@ -77,7 +77,6 @@ fun createInitTransaction(n: Int): Transaction {
 
 }
 
-
 fun createTransactionsForProcesses(initialTransaction: Transaction): List<Transaction> {
     val transactions: MutableList<Transaction> = mutableListOf()
     initialTransaction.transfer.entries.forEach {

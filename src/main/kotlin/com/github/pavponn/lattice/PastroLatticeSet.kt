@@ -3,7 +3,7 @@ package com.github.pavponn.lattice
 /**
  * @author pavponn
  */
-class PastroLatticeSet<E>(): LatticeSet<E>, LinkedHashSet<E>() {
+class PastroLatticeSet<E>() : LatticeSet<E>, LinkedHashSet<E>() {
 
     override fun leq(other: LatticeSet<E>): Boolean {
         return other.containsAll(this)
@@ -14,7 +14,7 @@ class PastroLatticeSet<E>(): LatticeSet<E>, LinkedHashSet<E>() {
     }
 
     override fun eq(other: LatticeSet<E>): Boolean {
-       return this leq other && other leq this
+        return this leq other && other leq this
     }
 
     override fun noteq(other: LatticeSet<E>): Boolean {

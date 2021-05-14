@@ -5,4 +5,4 @@ import com.github.pavponn.message.Message
 /**
  * @author pavponn
  */
-interface TVMessage: Message
+interface TVMessage : Message

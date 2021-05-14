@@ -15,5 +15,4 @@ data class Transaction(
     val spenderId: ProcessId,
     val transfer: TransferMap,
     val dependencies: DependencySet
-) {
-}
+)

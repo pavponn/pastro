@@ -5,15 +5,15 @@ import akka.actor.ActorRef
 import akka.actor.Props
 import com.github.pavponn.environment.Environment
 import com.github.pavponn.holder.validation.PastroTransactionValidation
-import com.github.pavponn.message.Message
-import com.github.pavponn.message.settings.SettingsMessage
-import com.github.pavponn.message.validation.TVMessage
-import com.github.pavponn.message.TransferMessage
-import com.github.pavponn.utils.ProcessId
 import com.github.pavponn.holder.validation.TransactionValidation
+import com.github.pavponn.message.Message
+import com.github.pavponn.message.TransferMessage
 import com.github.pavponn.message.UnknownMessageException
 import com.github.pavponn.message.settings.EnvironmentMessage
 import com.github.pavponn.message.settings.HolderMessage
+import com.github.pavponn.message.settings.SettingsMessage
+import com.github.pavponn.message.validation.TVMessage
+import com.github.pavponn.utils.ProcessId
 
 /**
  * @author pavponn

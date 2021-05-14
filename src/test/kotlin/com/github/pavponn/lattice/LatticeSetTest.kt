@@ -103,5 +103,4 @@ class LatticeSetTest {
         Assert.assertEquals(5, mergeSet.size)
     }
 
-
 }
