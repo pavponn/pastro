@@ -16,5 +16,4 @@ fun <T> compare(l1: T, l2: T): Int where T : Lattice<T> {
         l2 less l1 -> 1
         else -> 0
     }
-
 }
