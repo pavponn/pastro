@@ -1,4 +1,4 @@
-package com.github.pavponn.holder.validation
+package com.github.pavponn.validation
 
 import com.github.pavponn.environment.Environment
 import com.github.pavponn.fsds.ForwardSecureDigitalSignaturesBasic

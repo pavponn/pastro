@@ -4,8 +4,8 @@ import akka.actor.AbstractActor
 import akka.actor.ActorRef
 import akka.actor.Props
 import com.github.pavponn.environment.Environment
-import com.github.pavponn.holder.validation.PastroTransactionValidation
-import com.github.pavponn.holder.validation.TransactionValidation
+import com.github.pavponn.validation.PastroTransactionValidation
+import com.github.pavponn.validation.TransactionValidation
 import com.github.pavponn.message.Message
 import com.github.pavponn.message.TransferMessage
 import com.github.pavponn.message.UnknownMessageException

@@ -1,4 +1,4 @@
-package com.github.pavponn.holder.validation
+package com.github.pavponn.validation
 
 import com.github.pavponn.message.validation.TVMessage
 import com.github.pavponn.transaction.Transaction
