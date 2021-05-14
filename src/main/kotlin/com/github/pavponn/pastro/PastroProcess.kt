@@ -138,7 +138,7 @@ class PastroProcess : AbstractActor() {
                 "ConfigABLA"
             )
         configABLA.onResult { res, certificate ->
-            println("${self.path().name()} returned from ConfigABLA")
+            println("${self.path().name()} returned from ConfigABLA with $certificate")
             val configuration = PastroConfiguration(res)
             checker.tell(ConfigurationMessage(configuration), self)
             startHistoryABLA(configuration)
@@ -153,7 +153,7 @@ class PastroProcess : AbstractActor() {
                 "HistoryABLA"
             )
         historyABLA.onResult { res, certificate ->
-            println("${self.path().name()} returned from HistoryABLA")
+            println("${self.path().name()} returned from HistoryABLA with $certificate")
             val history = PastroHistory(res)
             checker.tell(HistoryMessage(history), self)
         }

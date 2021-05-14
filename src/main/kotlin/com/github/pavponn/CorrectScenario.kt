@@ -24,7 +24,7 @@ import kotlin.random.Random
  * @author pavponn
  */
 fun main() {
-    val nProcesses = 5
+    val nProcesses = 10
     val system: ActorSystem = ActorSystem.create("system")
     val processes: MutableList<ActorRef> = mutableListOf()
 
@@ -62,7 +62,7 @@ fun main() {
         processes[it - 1].tell(CheckerRefMessage(checkerActor), ActorRef.noSender())
     }
 
-    Thread.sleep(10000)
+    Thread.sleep(20000)
 
     // start modelling
     IntRange(1, nProcesses).forEach {
@@ -72,7 +72,7 @@ fun main() {
     }
 
     // wait before checking
-    Thread.sleep(10000)
+    Thread.sleep(20000)
 
     // check produced results
     checkerActor.tell(CheckConfigurationsMessage(), ActorRef.noSender())
