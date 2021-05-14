@@ -9,5 +9,6 @@ import com.github.pavponn.lattice.Lattice
 data class ProposeRequest<E : Lattice<E>>(
     val values: Set<VerifiableObject<E>>,
     val sn: Int,
-    val configSize: Int
+    val configSize: Int,
+    override val objectName: String = ""
 ) : ABLAMessage

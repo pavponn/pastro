@@ -5,4 +5,7 @@ import com.github.pavponn.message.Message
 /**
  * @author pavponn
  */
-interface ABLAMessage: Message
+interface ABLAMessage: Message {
+
+    val objectName: String
+}

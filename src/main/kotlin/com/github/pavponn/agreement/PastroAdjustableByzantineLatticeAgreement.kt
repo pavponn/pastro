@@ -20,6 +20,7 @@ class PastroAdjustableByzantineLatticeAgreement<E : Lattice<E>>(
     private val environment: Environment,
     private val historyHolder: HistoryHolder,
     private val verifyingFunction: (VerifiableObject<E>) -> Boolean,
+    private val name: String = ""
 
     ) : AdjustableByzantineLatticeAgreement<E> {
 
@@ -46,7 +47,7 @@ class PastroAdjustableByzantineLatticeAgreement<E : Lattice<E>>(
         seqNum += 1
         isProposing = true
         val config = historyHolder.getHistory().greatestConfig()
-        environment.broadcast(ProposeRequest(values.toSet(), seqNum, config.getSize()))
+        environment.broadcast(ProposeRequest(values.toSet(), seqNum, config.getSize(), name))
     }
 
     override fun verifyInput(element: VerifiableObject<E>): Boolean {
@@ -75,7 +76,7 @@ class PastroAdjustableByzantineLatticeAgreement<E : Lattice<E>>(
             values.addAll(message.values)
             if (config.getSize() == message.configSize) {
                 val signature = fsds.signFS(ProposeResponseSign(values), config.getSize())
-                environment.send(ProposeResponse<E>(values, signature, message.sn), from)
+                environment.send(ProposeResponse<E>(values, signature, message.sn, name), from)
             }
         }
     }

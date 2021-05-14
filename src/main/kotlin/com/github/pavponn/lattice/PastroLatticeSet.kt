@@ -3,7 +3,7 @@ package com.github.pavponn.lattice
 /**
  * @author pavponn
  */
-class PastroLatticeSet<E>() : LatticeSet<E>, LinkedHashSet<E>() {
+class PastroLatticeSet<E> : LatticeSet<E>, LinkedHashSet<E>() {
 
     override fun leq(other: LatticeSet<E>): Boolean {
         return other.containsAll(this)
@@ -30,6 +30,10 @@ class PastroLatticeSet<E>() : LatticeSet<E>, LinkedHashSet<E>() {
 }
 
 fun <E> latticeSetOf(vararg elements: E): LatticeSet<E> {
+    return latticeSetOf(elements.toList())
+}
+
+fun <E> latticeSetOf(elements: Collection<E>): LatticeSet<E> {
     val newPastroLatticeSet = PastroLatticeSet<E>()
     newPastroLatticeSet.addAll(elements)
     return newPastroLatticeSet

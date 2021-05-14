@@ -6,8 +6,12 @@ import com.github.pavponn.configuration.PastroConfiguration
 import com.github.pavponn.history.PastroHistory
 import com.github.pavponn.holder.PastroHistoryHolder
 import com.github.pavponn.message.TransferMessage
+import com.github.pavponn.message.checker.CheckConfigurationsMessage
+import com.github.pavponn.message.checker.CheckHistoriesMessage
+import com.github.pavponn.message.settings.CheckerRefMessage
 import com.github.pavponn.message.settings.EnvironmentMessage
 import com.github.pavponn.message.settings.HolderMessage
+import com.github.pavponn.pastro.CheckerActor
 import com.github.pavponn.pastro.PastroProcess
 import com.github.pavponn.transaction.Transaction
 import com.github.pavponn.transaction.signTransaction
@@ -20,7 +24,7 @@ import kotlin.random.Random
  * @author pavponn
  */
 fun main() {
-    val nProcesses = 10
+    val nProcesses = 5
     val system: ActorSystem = ActorSystem.create("system")
     val processes: MutableList<ActorRef> = mutableListOf()
 
@@ -42,6 +46,8 @@ fun main() {
         processes.add(system.actorOf(PastroProcess.createActor(), "p$it"))
     }
 
+    val checkerActor = system.actorOf(CheckerActor.createActor(), "checker")
+
     // send processes information about their initial environment
     IntRange(1, nProcesses).forEach {
         processes[it - 1].tell(EnvironmentMessage(it, processes.toTypedArray()), ActorRef.noSender())
@@ -52,12 +58,25 @@ fun main() {
         processes[it - 1].tell(HolderMessage(historyHolder), ActorRef.noSender())
     }
 
+    IntRange(1, nProcesses).forEach {
+        processes[it - 1].tell(CheckerRefMessage(checkerActor), ActorRef.noSender())
+    }
+
+    Thread.sleep(10000)
+
     // start modelling
     IntRange(1, nProcesses).forEach {
         val transaction = transactions[it - 1]
         val certificate = signTransaction(transaction)
         processes[it - 1].tell(TransferMessage(transaction, certificate), ActorRef.noSender())
     }
+
+    // wait before checking
+    Thread.sleep(10000)
+
+    // check produced results
+    checkerActor.tell(CheckConfigurationsMessage(), ActorRef.noSender())
+    checkerActor.tell(CheckHistoriesMessage(), ActorRef.noSender())
 }
 
 
