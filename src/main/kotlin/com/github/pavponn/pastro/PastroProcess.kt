@@ -17,6 +17,7 @@ import com.github.pavponn.message.UnknownMessageException
 import com.github.pavponn.message.agreement.ABLAMessage
 import com.github.pavponn.message.checker.ConfigurationMessage
 import com.github.pavponn.message.checker.HistoryMessage
+import com.github.pavponn.message.checker.TransactionMessage
 import com.github.pavponn.message.settings.CheckerRefMessage
 import com.github.pavponn.message.settings.EnvironmentMessage
 import com.github.pavponn.message.settings.HolderMessage
@@ -126,6 +127,7 @@ class PastroProcess : AbstractActor() {
             )
         transactionValidation.onResult { tx, certificate ->
             println("${self.path().name()} validated transaction $tx with certificate $certificate")
+            checker.tell(TransactionMessage(tx), self)
             startConfigABLA(tx)
         }
 
