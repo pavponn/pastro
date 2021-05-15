@@ -3,7 +3,7 @@
 ![Tests](https://github.com/pavponn/pastro/workflows/GitHub%20CI/badge.svg)
 [![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/pavponn/pastro/blob/master/LICENSE)
 
-This is proof-of-concept implementation of the Pastro protocol presented in Permissionless and Asynchronous Asset Transfer paper, which is available on [arXiv](https://arxiv.org/abs/2105.04966).  
+This is a proof-of-concept implementation of the Pastro protocol presented in Permissionless and Asynchronous Asset Transfer paper, which is available on [arXiv](https://arxiv.org/abs/2105.04966).  
 
 ## Abstract
 Most modern asset transfer systems use *consensus* to maintain a totally ordered chain of transactions. 
