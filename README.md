@@ -23,6 +23,6 @@ In the `DoubleSpendingScenario.kt` the transactions that are issued contain inva
 ## Tests
 
 Implementations of Transaction Validation and Adjustable Byzantine Lattice Agreement are covered with unit tests.
-Main primitives lik Transaction, Configuration and History are tested as well.
+Main primitives like Transaction, Configuration and History are tested as well.
 
 All unit tests are placed [here](https://github.com/pavponn/pastro/tree/master/src/test/kotlin/com/github/pavponn).
