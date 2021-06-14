@@ -14,6 +14,7 @@ import com.github.pavponn.utils.ProcessId
 
 /**
  * @author pavponn
+ *
  * Class that implements checking logic.
  * It receives all the configurations and histories produced by the algorithm and
  * checks whether they are all comparable.

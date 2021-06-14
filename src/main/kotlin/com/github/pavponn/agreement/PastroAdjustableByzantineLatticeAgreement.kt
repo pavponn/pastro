@@ -22,7 +22,7 @@ class PastroAdjustableByzantineLatticeAgreement<E : Lattice<E>>(
     private val verifyingFunction: (VerifiableObject<E>) -> Boolean,
     private val name: String = ""
 
-    ) : AdjustableByzantineLatticeAgreement<E> {
+) : AdjustableByzantineLatticeAgreement<E> {
 
     private val values: MutableSet<VerifiableObject<E>> = mutableSetOf(initInput)
     private var acks: MutableSet<ProcessId> = mutableSetOf()
@@ -65,18 +65,12 @@ class PastroAdjustableByzantineLatticeAgreement<E : Lattice<E>>(
     }
 
     private fun handleProposeRequest(message: ProposeRequest<E>, from: ProcessId) {
-        if (
-            message.configSize != historyHolder.getConfigInstalled().getSize() &&
-            historyHolder.getHistory().greatestConfig().getSize() >= message.configSize
-        ) {
-            // intentionally left blank
-        }
         val config = historyHolder.getHistory().greatestConfig()
         if (verifyInputs(message.values)) {
             values.addAll(message.values)
             if (config.getSize() == message.configSize) {
                 val signature = fsds.signFS(ProposeResponseSign(values), config.getSize())
-                environment.send(ProposeResponse<E>(values, signature, message.sn, name), from)
+                environment.send(ProposeResponse(values, signature, message.sn, name), from)
             }
         }
     }
@@ -88,7 +82,7 @@ class PastroAdjustableByzantineLatticeAgreement<E : Lattice<E>>(
 
         val config = historyHolder.getHistory().greatestConfig()
         val isValid = fsds.verifyFS(
-            ProposeResponseSign<E>(message.vs),
+            ProposeResponseSign(message.vs),
             from,
             message.signature,
             config.getSize()

@@ -1,6 +1,5 @@
 package com.github.pavponn.history
 
-import com.github.pavponn.configuration.ConfigurationLatticeTest
 import com.github.pavponn.configuration.PastroConfiguration
 import com.github.pavponn.transaction.Transaction
 import com.github.pavponn.utils.DefaultValues
@@ -44,7 +43,6 @@ class HistoryLatticeTest {
         val CONFIGURATION_1 = PastroConfiguration(setOf(TRANSACTION_1))
         val CONFIGURATION_2 = PastroConfiguration(setOf(TRANSACTION_1, TRANSACTION_2))
         val CONFIGURATION_3 = PastroConfiguration(setOf(TRANSACTION_1, TRANSACTION_2, TRANSACTION_3))
-        val CONFIGURATION_4 = PastroConfiguration(setOf(TRANSACTION_1, TRANSACTION_2, TRANSACTION_3, TRANSACTION_4))
     }
 
     @Test

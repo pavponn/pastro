@@ -57,9 +57,9 @@ fun main(args: Array<String>) {
         .subList(nProcesses, allTransactions.size).flatMap {
             val entries = it.transfer.entries
             val map: MutableMap<ProcessId, Int> = mutableMapOf()
-            entries.forEach {
+            entries.forEach { entry ->
                 val to = Random.nextInt(1, initTransaction.transfer.size + 1)
-                map[to] = it.value
+                map[to] = entry.value
             }
             val other = Transaction(
                 1,

@@ -4,8 +4,10 @@ import com.github.pavponn.message.Message
 
 /**
  * @author pavponn
+ *
+ * A common interface for  messages for ABLA objects.
  */
-interface ABLAMessage: Message {
+interface ABLAMessage : Message {
 
     val objectName: String
 }

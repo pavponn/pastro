@@ -17,7 +17,6 @@ fun verifySender(transaction: Transaction, certificate: Certificate): Boolean {
     } catch (e: Exception) {
         false
     }
-
 }
 
 /**

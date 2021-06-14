@@ -5,6 +5,9 @@ import com.github.pavponn.utils.ProcessId
 
 /**
  * @author pavponn
+ *
+ * Common interface for all distributed environments.
+ * It provides main functions to work with the system.
  */
 interface Environment {
 
@@ -12,7 +15,6 @@ interface Environment {
      * Identifier of this process (from 1 to [nProcesses]).
      */
     val processId: ProcessId
-
 
     /**
      * The total number of processes in the system.

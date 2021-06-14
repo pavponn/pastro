@@ -19,7 +19,7 @@ import com.github.pavponn.utils.SignedTransaction
 class PastroTransactionValidation(
     private val historyHolder: HistoryHolder,
     private val environment: Environment,
-    private val initialSeenTransactions: Set<Transaction>,
+    initialSeenTransactions: Set<Transaction>,
 ) : TransactionValidation {
 
     enum class Status {
@@ -69,12 +69,6 @@ class PastroTransactionValidation(
     }
 
     private fun handleValidateRequest(message: ValidateRequest, from: ProcessId) {
-        if (
-            message.configSize != historyHolder.getConfigInstalled().getSize() &&
-            historyHolder.getHistory().greatestConfig().getSize() >= message.configSize
-        ) {
-            // intentionally left blank
-        }
         val signedTransaction = message.signedTransaction
         val transaction = message.signedTransaction.first
         val seenTransactionsNotSigned = signedTransactionsToTransactions(seenTransactions)

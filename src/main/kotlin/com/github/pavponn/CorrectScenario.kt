@@ -9,15 +9,16 @@ import com.github.pavponn.message.TransferMessage
 import com.github.pavponn.message.checker.CheckConfigurationsMessage
 import com.github.pavponn.message.checker.CheckHistoriesMessage
 import com.github.pavponn.message.checker.CheckTransactionsMessage
-import com.github.pavponn.message.checker.TransactionMessage
 import com.github.pavponn.message.settings.CheckerRefMessage
 import com.github.pavponn.message.settings.EnvironmentMessage
 import com.github.pavponn.message.settings.HolderMessage
 import com.github.pavponn.pastro.CheckerActor
 import com.github.pavponn.pastro.PastroProcess
 import com.github.pavponn.transaction.signTransaction
-import com.github.pavponn.utils.*
 import com.github.pavponn.utils.DefaultValues.DEFAULT_CERTIFICATE
+import com.github.pavponn.utils.createInitTransaction
+import com.github.pavponn.utils.createTransactions
+import com.github.pavponn.utils.printInitStakeDistribution
 
 /**
  * @author pavponn

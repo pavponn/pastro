@@ -33,7 +33,7 @@ class PastroConfiguration(private val transactions: Set<Transaction>) : Configur
     override fun hasQuorum(processes: Set<ProcessId>): Boolean {
         val stakes = getStakeDistribution()
         val totalStake: Double = getTotalStake().toDouble()
-        var processesStake: Double = 0.0
+        var processesStake = 0.0
         stakes.forEach {
             if (processes.contains(it.key)) {
                 processesStake += it.value

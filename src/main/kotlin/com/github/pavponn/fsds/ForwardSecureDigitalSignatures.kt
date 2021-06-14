@@ -7,6 +7,8 @@ import com.github.pavponn.utils.Timestamp
 
 /**
  * @author pavponn
+ *
+ * An interface that should be implemented by any implementation of forward-secure digital signatures.
  */
 interface ForwardSecureDigitalSignatures {
 

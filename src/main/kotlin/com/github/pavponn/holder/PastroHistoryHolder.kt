@@ -44,7 +44,6 @@ class PastroHistoryHolder(historyInit: HistoryLattice, certificateInit: Certific
     }
 
     override fun updateHistory(history: HistoryLattice, certificate: Certificate) {
-        // TODO: certificate checking
         if (this.historyCurrent leq history) {
             this.historyCurrent = history
         }
